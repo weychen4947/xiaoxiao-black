@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>凌晨與小小黑的幸福生活</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); }
+    .active-btn { background-color: #4F46E5 !important; color: white !important; font-weight: bold; border-color: #4F46E5 !important; }
+    .nav-active { color: #4F46E5 !important; font-weight: bold; }
+    .park-selected { border-color: #4F46E5 !important; background-color: #EEF2FF !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-20">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white p-4 shadow-lg sticky top-0 z-50">
+    <div class="max-w-md mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl">🖤🐶</span>
+        <div>
+          <h1 class="font-bold text-lg leading-tight">凌晨與小小黑的幸福生活</h1>
+          <p class="text-xs text-indigo-200">台中西屯區文華路152號 護航中</p>
+        </div>
+      </div>
+      <span class="bg-indigo-700 text-xs px-2.5 py-1 rounded-full border border-indigo-400">專屬隨身 App</span>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto p-4">
+
+    <!-- ================= 頁面 1: 今日 Care ================= -->
+    <div id="page-care" class="tab-content space-y-4">
+      
+      <!-- 每月 5 日全能狗 S 驅蟲提醒 -->
+      <div id="nexgard-card" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 card-shadow">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xl shadow">
+              💊
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">每月 5 日：餵全能狗 S</h3>
+              <p id="nexgard-status" class="text-xs text-amber-700 mt-0.5 font-medium">距離下一次餵食日 (11/05) 還剩 20 天</p>
+            </div>
+          </div>
+          <div class="flex flex-col space-y-1">
+            <button id="nexgard-btn" onclick="toggleNexgard()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow transition">
+              打勾簽到
+            </button>
+            <a id="calendar-link" target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E5%96%B2%E5%B0%8F%E5%B0%8F%E9%BB%91%E5%90%83%E5%85%A8%E8%83%BD%E7%8B%97S&details=%E6%AF%8F%E1%B8%9B5%E6%97%A5%E5%AE%9A%E6%99%82%E9%A4%B5%E9%A3%9F%E5%85%A8%E8%83%BD%E7%8B%97S%E9%A0%90%E9%98%B2%E5%BF%83%E7%B3%B2%E8%9F%B2%E8%88%87%E9%A0%86%E9%AB%94%E5%A4%96%E5%AF%84%E7%94%9F%E8%9F%B2%EF%BC%81&dates=20261105T090000Z/20261105T100000Z" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-bold rounded text-center transition">
+              📅 加到行事曆
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 紀念日倒數卡片 -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3 card-shadow flex items-center space-x-2.5">
+          <span class="text-2xl">🎂</span>
+          <div>
+            <h4 class="text-[11px] font-bold text-pink-700">4 月生日倒數</h4>
+            <p id="bday-countdown" class="text-xs font-bold text-pink-900 mt-0.5">載入中...</p>
+          </div>
+        </div>
+        <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-3 card-shadow flex items-center space-x-2.5">
+          <span class="text-2xl">🏠</span>
+          <div>
+            <h4 class="text-[11px] font-bold text-indigo-700">3/05 到家紀念日</h4>
+            <p id="home-countdown" class="text-xs font-bold text-indigo-900 mt-0.5">載入中...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 每日健康管理與體重紀錄 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <h3 class="font-bold text-slate-800 text-sm flex items-center justify-between">
+          <span class="flex items-center"><span class="mr-1.5">🦷</span> 每日健康管理</span>
+          <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-normal">體重：<strong id="weight-display" class="text-indigo-600">19.0</strong> kg</span>
+        </h3>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button id="brush-btn" onclick="toggleBrush()" class="p-2.5 bg-teal-50 border border-teal-200 hover:bg-teal-100 text-teal-800 rounded-xl font-semibold text-left transition flex justify-between items-center">
+            <span>🦷 睡前刷牙</span>
+            <span id="brush-check" class="text-teal-600">未簽到</span>
+          </button>
+          <button id="fishoil-btn" onclick="toggleFishoil()" class="p-2.5 bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-800 rounded-xl font-semibold text-left transition flex justify-between items-center">
+            <span>🐟 魚油/關節保健</span>
+            <span id="fishoil-check" class="text-blue-600">未簽到</span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl text-xs">
+          <span class="text-slate-500">微調小小黑體重：</span>
+          <div class="flex items-center space-x-2">
+            <button onclick="adjustWeight(-0.1)" class="w-6 h-6 bg-white border rounded font-bold text-slate-600 shadow-sm">-</button>
+            <span id="weight-input" class="font-bold text-slate-800">19.0 kg</span>
+            <button onclick="adjustWeight(0.1)" class="w-6 h-6 bg-white border rounded font-bold text-slate-600 shadow-sm">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 狗狗檔案小卡 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center text-2xl border-2 border-amber-400 shadow">
+            🖤
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="font-bold text-slate-800 text-base">小小黑</h2>
+              <span class="bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded">米克斯 女生 ✂️</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">5.5 歲 (2021/04) | 到家日：2023/03/05</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= 頁面 2: 衣櫥 Fitting & 相簿 ================= -->
+    <div id="page-outfit" class="tab-content hidden space-y-4">
+      
+      <!-- 穿搭衣櫥 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-800 flex items-center text-sm">
+            <span class="mr-1.5">👕</span> 小小黑的穿搭衣櫥
+          </h3>
+          <span id="current-outfit-badge" class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md font-bold">粉紅色長袖</span>
+        </div>
+
+        <div class="bg-slate-100/70 rounded-2xl p-4 mb-4 flex flex-col items-center justify-center border border-slate-200 shadow-inner">
+          <div id="dog-avatar-container" class="w-56 h-40 flex items-center justify-center relative">
+            <svg viewBox="0 0 200 140" class="w-full h-full drop-shadow-md">
+              <path d="M 25 70 Q 10 50 12 35 Q 20 45 30 65" fill="#1e293b" />
+              <path d="M 35 75 C 25 90 20 110 25 125 L 35 125 C 32 110 38 95 48 80 Z" fill="#0f172a" />
+              <path d="M 45 75 C 38 90 35 110 40 125 L 50 125 C 45 110 50 95 58 80 Z" fill="#1e293b" />
+              <rect x="135" y="80" width="10" height="45" rx="4" fill="#0f172a" />
+              <rect x="148" y="80" width="10" height="45" rx="4" fill="#1e293b" />
+              <path d="M 35 70 Q 50 60 100 62 Q 140 65 150 78 L 140 90 Q 90 95 45 85 Z" fill="#1e293b" />
+              <g id="outfit-svg-layer"></g>
+              <path d="M 130 70 L 150 40 L 165 45 L 150 75 Z" fill="#1e293b" />
+              <path d="M 148 42 L 138 10 L 160 30 Z" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+              <path d="M 155 42 L 175 12 L 168 35 Z" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="160" cy="45" r="14" fill="#1e293b" />
+              <path d="M 165 42 Q 185 45 182 54 Q 165 58 160 52 Z" fill="#0f172a" />
+              <ellipse cx="180" cy="47" rx="3" ry="2.5" fill="#000000" />
+              <circle cx="162" cy="42" r="2.5" fill="#ffffff" />
+              <circle cx="162" cy="42" r="1.5" fill="#000000" />
+            </svg>
+          </div>
+          <p id="outfit-description" class="text-xs text-indigo-900 font-medium mt-2 text-center">
+            💗 經典粉紅保暖外套，暖呼呼又超有質感！
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button onclick="selectOutfit('粉紅色長袖')" class="outfit-btn border border-indigo-200 bg-indigo-50 text-indigo-700 py-2.5 px-3 rounded-xl font-medium text-left transition active-btn">💗 粉紅色長袖</button>
+          <button onclick="selectOutfit('條紋長袖')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400">👕 條紋長袖</button>
+          <button onclick="selectOutfit('無袖涼感衣')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400">❄️ 無袖涼感衣</button>
+          <button onclick="selectOutfit('牛仔吊帶裙')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400">👗 牛仔吊帶裙</button>
+          <button onclick="selectOutfit('特力屋圍裙')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400">👩‍🍳 特力屋圍裙</button>
+          <button onclick="selectOutfit('白底黃色愛心裙')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400">💛 白底黃色愛心裙</button>
+          <button onclick="selectOutfit('今天不穿衣服')" class="outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition col-span-2 hover:border-indigo-400 text-center">🐕 自然裸奔款 (帥氣黑毛全露)</button>
+        </div>
+      </div>
+
+      <!-- 小小黑圖片上傳與相簿區 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center">
+            <span class="mr-1.5">📸</span> 上傳小小黑的生活美照
+          </h3>
+          <label class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow transition flex items-center space-x-1">
+            <span>📷 上傳照片</span>
+            <input type="file" id="photo-upload" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+          </label>
+        </div>
+
+        <p class="text-[11px] text-slate-400">選擇手機照片後，照片將即時儲存展示在下方個人相簿中：</p>
+
+        <div id="photo-gallery" class="grid grid-cols-2 gap-2 pt-1">
+          <div class="aspect-square bg-slate-100 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs">
+            <span>🖼️ 尚無上傳</span>
+            <span class="text-[10px] mt-1">點擊右上角新增</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= 頁面 3: 散步 Walking ================= -->
+    <div id="page-walk" class="tab-content hidden space-y-4">
+      
+      <!-- 黃金散步指數卡片 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-slate-800 flex items-center text-sm">
+            <span class="mr-1.5">🌙</span> 晚間 19:00 - 21:00 散步窗口
+          </h3>
+          <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full">極佳 95分</span>
+        </div>
+        <div class="bg-indigo-50/50 p-3 rounded-xl mb-1 text-xs text-indigo-900 space-y-1">
+          <p>• 西屯地面已降溫，空氣舒適無雨。</p>
+          <p>• 建議運動量：30~45 分鐘（逢甲/文修公園順路）。</p>
+        </div>
+      </div>
+
+      <!-- 新增：🌳 今晚要去哪個公園散步？ (公園地圖選單) -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center">
+            <span class="mr-1.5">🌳</span> 今天要去哪個公園散步？
+          </h3>
+          <span id="selected-park-badge" class="text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold">文修公園</span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <!-- 公園 1 -->
+          <div onclick="selectPark('文修公園')" id="park-1" class="park-card p-3 rounded-xl border border-indigo-200 bg-indigo-50/50 transition cursor-pointer flex justify-between items-center park-selected">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>1. 文修公園</span>
+                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded">🚶 步行 5 分鐘</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">文華路近西苑路 | 湖畔步道、大草皮與休閒座椅</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=文修公園" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <!-- 公園 2 -->
+          <div onclick="selectPark('西大墩寵物公園')" id="park-2" class="park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>2. 西大墩寵物公園</span>
+                <span class="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.2 rounded">🐕 專屬圍欄</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">環中路二段 | 設有專屬跑跑圍欄、免繫繩放電</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=西大墩寵物公園" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <!-- 公園 3 -->
+          <div onclick="selectPark('逢甲公園')" id="park-3" class="park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>3. 逢甲公園</span>
+                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded">🚶 步行 10 分鐘</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">逢甲路近逢大路 | 平坦環形步道，夜間燈光明亮</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=逢甲公園" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <!-- 公園 4 -->
+          <div onclick="selectPark('秋紅谷景觀生態公園')" id="park-4" class="park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>4. 秋紅谷景觀生態公園</span>
+                <span class="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.2 rounded">🌃 夜景網美公園</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">朝富路 | 湖畔微風涼爽、環境優美適合拍寫真</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=秋紅谷景觀生態公園" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <!-- 公園 5 -->
+          <div onclick="selectPark('文心森林公園寵物專區')" id="park-5" class="park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>5. 文心森林公園寵物區</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.2 rounded">🌳 七期大草原</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">文心路一段 | 大片草坪與圍欄跑跑區、毛孩聚會</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=文心森林公園寵物區" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <!-- 公園 6 -->
+          <div onclick="selectPark('台中都會公園')" id="park-6" class="park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center space-x-1">
+                <span>6. 台中都會公園</span>
+                <span class="text-[10px] bg-sky-100 text-sky-700 px-1.5 py-0.2 rounded">🚗 假日踏青首選</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">都會園路 | 88公頃超大自然視野、草地極度放電</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=台中都會公園" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 黑狗發光提醒卡片 -->
+      <div class="bg-slate-900 text-slate-200 p-4 rounded-2xl text-xs space-y-2 card-shadow">
+        <div class="flex items-center space-x-2 text-amber-400 font-bold">
+          <span class="text-base">💡</span>
+          <span>黑狗夜間散步警示</span>
+        </div>
+        <p class="text-slate-300 leading-relaxed">
+          小小黑毛色極黑，夜間在西屯區巷弄散步時隱密性高，請務必開啟並佩戴<strong>發光項圈或發光牽繩</strong>，提升汽機車辨識度！
+        </p>
+      </div>
+    </div>
+
+    <!-- ================= 頁面 4: 生活 Life (餐廳+醫療+照護+粉專) ================= -->
+    <div id="page-life" class="tab-content hidden space-y-4">
+      
+      <!-- 粉專快捷 -->
+      <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-3.5 text-white card-shadow flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <span class="text-2xl">📸</span>
+          <div>
+            <h3 class="font-bold text-sm">小小黑的星光粉專</h3>
+            <p class="text-[11px] opacity-90">@iamxiaoxiaoblack | PopDaily</p>
+          </div>
+        </div>
+        <div class="flex space-x-2">
+          <a href="https://www.instagram.com/iamxiaoxiaoblack/" target="_blank" class="bg-white/20 hover:bg-white/30 text-white text-xs px-2.5 py-1.5 rounded-lg font-semibold transition">IG</a>
+          <a href="https://www.popdaily.com.tw/user/471202" target="_blank" class="bg-white/20 hover:bg-white/30 text-white text-xs px-2.5 py-1.5 rounded-lg font-semibold transition">PopDaily</a>
+        </div>
+      </div>
+
+      <!-- 寵物保母、住宿與自助洗澡專區 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <h3 class="font-bold text-slate-800 text-sm flex items-center">
+          <span class="mr-1.5">🐕‍🦺</span> 西屯/逢甲 寵物保母、住宿與自助洗澡
+        </h3>
+        <div class="space-y-2 text-xs">
+          <div class="p-3 rounded-xl border border-indigo-100 bg-indigo-50/50 flex justify-between items-center">
+            <div>
+              <span class="font-bold text-indigo-900 block">🏡 到府寵物保母 (Fluffypaw 西屯區)</span>
+              <span class="text-indigo-700 text-[10px]">居家陪伴散步、餵食餵藥、陪伴玩耍</span>
+            </div>
+            <a href="https://line.me" target="_blank" class="px-2.5 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-[11px] shadow-sm">💬 預約</a>
+          </div>
+          <div class="p-3 rounded-xl border border-amber-100 bg-amber-50/50 flex justify-between items-center">
+            <div>
+              <span class="font-bold text-amber-900 block">🏨 英倫王子寵物旅館 (逢甲公園正對面)</span>
+              <span class="text-amber-700 text-[10px]">圍片大空間不關籠 | 西屯近文華路</span>
+            </div>
+            <a href="tel:0424521277" class="px-2.5 py-1.5 bg-amber-600 text-white font-bold rounded-lg text-[11px] shadow-sm">📞 直撥</a>
+          </div>
+          <div class="p-3 rounded-xl border border-teal-100 bg-teal-50/50 flex justify-between items-center">
+            <div>
+              <span class="font-bold text-teal-900 block">🛁 洗毛毛寵物自助 SPA 澡堂 (青海路)</span>
+              <span class="text-teal-700 text-[10px]">大型犬/中型犬高壓水療與恆溫烘乾機</span>
+            </div>
+            <a href="tel:0436096789" class="px-2.5 py-1.5 bg-teal-600 text-white font-bold rounded-lg text-[11px] shadow-sm">📞 直撥</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 周邊寵物友善餐廳 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center">
+            <span class="mr-1.5">🥩</span> 周邊寵物友善餐廳
+          </h3>
+          <button onclick="rollDice()" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow hover:opacity-90 transition">🎲 骰一個</button>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div id="rest-1" class="restaurant-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800">
+                <span>1. HOME 燒肉 逢甲店</span>
+                <span class="text-amber-600 text-[10px] ml-1">⭐ 招待無調味水煮肉</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">河南路二段256號 | 可落地、可上椅</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=HOME燒肉逢甲店" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <div id="rest-2" class="restaurant-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800">
+                <span>2. 烏竹樓 OT Kitchen</span>
+                <span class="text-indigo-600 text-[10px] ml-1">步行 4 分鐘</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">西安街166號 | 台式簡餐熱炒，毛孩可落地</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=烏竹樓OTKitchen" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+
+          <div id="rest-3" class="restaurant-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center">
+            <div>
+              <div class="font-bold text-slate-800">
+                <span>3. LETTUCE 雷特斯美式漢堡</span>
+                <span class="text-indigo-600 text-[10px] ml-1">步行 6 分鐘</span>
+              </div>
+              <p class="text-slate-500 text-[11px] mt-0.5">福上巷329號 | 夜間美式漢堡，寵物友善</p>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=LETTUCE雷特斯美式漢堡" target="_blank" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm flex items-center space-x-1 shrink-0">
+              <span>🗺️ 導航</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 獸醫通訊錄 -->
+      <div class="bg-white rounded-2xl p-4 card-shadow border border-slate-100 space-y-3">
+        <h3 class="font-bold text-slate-800 text-sm flex items-center">
+          <span class="mr-1.5">🏥</span> 西屯周邊獸醫與急診通訊錄
+        </h3>
+        <div class="space-y-2 text-xs">
+          <div class="p-2.5 rounded-xl border border-rose-100 bg-rose-50/60 flex justify-between items-center">
+            <div>
+              <span class="font-bold text-rose-900 block">🚨 全國動物醫院 (24h 急診)</span>
+              <span class="text-rose-700 text-[10px]">五權八街 100 號 | 夜間急診首選</span>
+            </div>
+            <a href="tel:0423710496" class="px-2.5 py-1.5 bg-rose-600 text-white font-bold rounded-lg text-[11px]">📞 直撥</a>
+          </div>
+          <div class="p-2.5 rounded-xl border border-slate-100 bg-slate-50 flex justify-between items-center">
+            <div>
+              <span class="font-bold text-slate-800 block">🏥 邁阿密動物醫院 (近逢甲)</span>
+              <span class="text-slate-500 text-[10px]">西屯路二段 269-12 號</span>
+            </div>
+            <a href="tel:0424528119" class="px-2.5 py-1.5 bg-indigo-600 text-white font-bold rounded-lg text-[11px]">📞 直撥</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 底部固定分頁導覽列 -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 shadow-lg">
+    <div class="max-w-md mx-auto flex justify-around py-2">
+      <button onclick="switchTab('care')" id="nav-care" class="nav-item flex flex-col items-center text-slate-400 nav-active">
+        <span class="text-lg">🏠</span>
+        <span class="text-[10px] mt-0.5">今日 Care</span>
+      </button>
+      <button onclick="switchTab('outfit')" id="nav-outfit" class="nav-item flex flex-col items-center text-slate-400">
+        <span class="text-lg">👕</span>
+        <span class="text-[10px] mt-0.5">衣櫥 Fitting</span>
+      </button>
+      <button onclick="switchTab('walk')" id="nav-walk" class="nav-item flex flex-col items-center text-slate-400">
+        <span class="text-lg">🌙</span>
+        <span class="text-[10px] mt-0.5">散步 Walking</span>
+      </button>
+      <button onclick="switchTab('life')" id="nav-life" class="nav-item flex flex-col items-center text-slate-400">
+        <span class="text-lg">🥩</span>
+        <span class="text-[10px] mt-0.5">生活 Life</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+
+      document.getElementById(`page-${tabName}`).classList.remove('hidden');
+      document.getElementById(`nav-${tabName}`).classList.add('nav-active');
+    }
+
+    // 選擇散步公園點擊高亮邏輯
+    function selectPark(parkName) {
+      document.getElementById('selected-park-badge').innerText = parkName;
+      const parkCards = document.querySelectorAll('.park-card');
+      parkCards.forEach(card => {
+        if (card.innerText.includes(parkName)) {
+          card.className = "park-card p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50/70 transition cursor-pointer flex justify-between items-center park-selected";
+        } else {
+          card.className = "park-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition cursor-pointer flex justify-between items-center";
+        }
+      });
+    }
+
+    let photosList = JSON.parse(localStorage.getItem('xiaoxiao_photos') || '[]');
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Img = e.target.result;
+        photosList.unshift(base64Img);
+        try {
+          localStorage.setItem('xiaoxiao_photos', JSON.stringify(photosList));
+        } catch (err) {
+          console.warn("照片載入成功！");
+        }
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderGallery() {
+      const gallery = document.getElementById('photo-gallery');
+      if (photosList.length === 0) {
+        gallery.innerHTML = `
+          <div class="aspect-square bg-slate-100 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs col-span-2 py-8">
+            <span>🖼️ 尚無上傳照片</span>
+            <span class="text-[10px] mt-1">點擊右上角「📷 上傳照片」選擇小小黑寫真</span>
+          </div>
+        `;
+        return;
+      }
+
+      gallery.innerHTML = photosList.map((src, index) => `
+        <div class="aspect-square bg-slate-900 rounded-xl overflow-hidden relative shadow group">
+          <img src="${src}" class="w-full h-full object-cover">
+          <button onclick="deletePhoto(${index})" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-600 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center shadow">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function deletePhoto(index) {
+      photosList.splice(index, 1);
+      try {
+        localStorage.setItem('xiaoxiao_photos', JSON.stringify(photosList));
+      } catch (e) {}
+      renderGallery();
+    }
+
+    const outfits = {
+      '粉紅色長袖': {
+        desc: "💗 經典粉紅保暖外套，軟萌又暖呼呼！",
+        svg: '<path d="M 38 63 Q 50 55 105 58 Q 140 62 145 75 L 138 88 Q 90 92 42 82 Z" fill="#ec4899" stroke="#db2777" stroke-width="1.5" /><path d="M 125 58 Q 138 60 145 75 Q 130 80 120 75 Z" fill="#f472b6" />'
+      },
+      '條紋長袖': {
+        desc: "👕 經典紅白條紋長袖，簡約亮眼！",
+        svg: '<path d="M 38 63 Q 50 55 105 58 Q 140 62 145 75 L 138 88 Q 90 92 42 82 Z" fill="#ef4444" /><path d="M 50 60 L 52 83 M 70 59 L 72 87 M 90 59 L 92 89 M 110 60 L 112 88 M 130 63 L 130 82" stroke="#ffffff" stroke-width="4" />'
+      },
+      '無袖涼感衣': {
+        desc: "❄️ 薄荷綠防曬涼感背心，透氣排汗首選！",
+        svg: '<path d="M 45 62 Q 55 57 105 58 Q 135 62 140 75 L 135 86 Q 90 90 48 82 Z" fill="#06b6d4" /><circle cx="90" cy="72" r="5" fill="#ffffff" opacity="0.8" />'
+      },
+      '牛仔吊帶裙': {
+        desc: "👗 率性丹寧牛仔吊帶裙，文青網美風！",
+        svg: '<path d="M 55 60 L 115 60 L 125 88 L 45 84 Z" fill="#1e40af" /><path d="M 115 60 L 135 70" stroke="#1d4ed8" stroke-width="3" />'
+      },
+      '特力屋圍裙': {
+        desc: "👩‍🍳 亮橘色職人圍裙，職人感十足！",
+        svg: '<path d="M 60 60 L 120 62 L 130 88 L 50 84 Z" fill="#ea580c" /><rect x="80" y="68" width="20" height="12" rx="2" fill="#c2410c" />'
+      },
+      '白底黃色愛心裙': {
+        desc: "💛 白底黃色愛心裙，俏皮可愛吸睛破表！",
+        svg: '<path d="M 45 62 Q 55 57 105 58 Q 138 62 142 75 L 135 88 Q 90 92 42 82 Z" fill="#ffffff" stroke="#fde047" stroke-width="2" /><circle cx="70" cy="72" r="3" fill="#eab308" /><circle cx="100" cy="74" r="3" fill="#eab308" />'
+      },
+      '今天不穿衣服': {
+        desc: "🐕 自然裸奔款！展示小小黑帥氣順滑的黑狗毛髮！",
+        svg: '<path d="M 132 72 Q 140 75 145 72" stroke="#dc2626" stroke-width="3" fill="none" /><circle cx="140" cy="76" r="3" fill="#fbbf24" />'
+      }
+    };
+
+    function selectOutfit(name) {
+      document.getElementById('current-outfit-badge').innerText = name;
+      const btns = document.querySelectorAll('.outfit-btn');
+      btns.forEach(btn => {
+        if(btn.innerText.includes(name)) {
+          btn.className = "outfit-btn border border-indigo-200 bg-indigo-50 text-indigo-700 py-2.5 px-3 rounded-xl font-medium text-left transition active-btn";
+        } else {
+          btn.className = "outfit-btn border border-slate-200 bg-slate-50 text-slate-700 py-2.5 px-3 rounded-xl font-medium text-left transition hover:border-indigo-400";
+        }
+      });
+      const outfitData = outfits[name] || outfits['今天不穿衣服'];
+      document.getElementById('outfit-svg-layer').innerHTML = outfitData.svg;
+      document.getElementById('outfit-description').innerText = outfitData.desc;
+    }
+
+    function initCountdowns() {
+      const now = new Date(2026, 9, 16);
+      const bday = new Date(2027, 3, 1);
+      const diffBday = Math.ceil((bday - now) / (1000 * 60 * 60 * 24));
+      document.getElementById('bday-countdown').innerText = `倒數 ${diffBday} 天 (滿6歲)`;
+
+      const home = new Date(2027, 2, 5);
+      const diffHome = Math.ceil((home - now) / (1000 * 60 * 60 * 24));
+      document.getElementById('home-countdown').innerText = `倒數 ${diffHome} 天 (滿4週年)`;
+    }
+
+    let currentWeight = 19.0;
+    function adjustWeight(val) {
+      currentWeight = Math.round((currentWeight + val) * 10) / 10;
+      document.getElementById('weight-display').innerText = currentWeight.toFixed(1);
+      document.getElementById('weight-input').innerText = `${currentWeight.toFixed(1)} kg`;
+    }
+
+    let brushed = false;
+    function toggleBrush() {
+      brushed = !brushed;
+      const check = document.getElementById('brush-check');
+      check.innerText = brushed ? "✓ 已完成" : "未簽到";
+      check.className = brushed ? "text-emerald-600 font-bold" : "text-teal-600";
+    }
+
+    let fishoil = false;
+    function toggleFishoil() {
+      fishoil = !fishoil;
+      const check = document.getElementById('fishoil-check');
+      check.innerText = fishoil ? "✓ 已完成" : "未簽到";
+      check.className = fishoil ? "text-emerald-600 font-bold" : "text-blue-600";
+    }
+
+    let nexgardDone = false;
+    function toggleNexgard() {
+      nexgardDone = !nexgardDone;
+      const btn = document.getElementById('nexgard-btn');
+      const status = document.getElementById('nexgard-status');
+      if(nexgardDone) {
+        btn.innerText = "✓ 已吃藥";
+        btn.className = "px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg shadow";
+        status.innerText = "🎉 本月全能狗 S 已餵食完畢！";
+      } else {
+        btn.innerText = "打勾簽到";
+        btn.className = "px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg shadow";
+        status.innerText = "距離下一次餵食日 (11/05) 還剩 20 天";
+      }
+    }
+
+    function rollDice() {
+      const cards = [document.getElementById('rest-1'), document.getElementById('rest-2'), document.getElementById('rest-3')];
+      cards.forEach(c => c.className = "restaurant-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center");
+      let count = 0;
+      const interval = setInterval(() => {
+        const randIndex = Math.floor(Math.random() * 3);
+        cards.forEach((c, idx) => {
+          if(idx === randIndex) {
+            c.className = "restaurant-card p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 transition flex justify-between items-center";
+          } else {
+            c.className = "restaurant-card p-3 rounded-xl border border-slate-100 bg-slate-50 transition flex justify-between items-center";
+          }
+        });
+        count++;
+        if(count > 10) clearInterval(interval);
+      }, 100);
+    }
+
+    window.onload = function() {
+      initCountdowns();
+      selectOutfit('粉紅色長袖');
+      renderGallery();
+    };
+  </script>
+</body>
+</html>
